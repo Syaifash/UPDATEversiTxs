@@ -2,230 +2,166 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Shadow Text Mode</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>SHADOW UPDATE</title>
 
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-
-body{
-  font-family:'JetBrains Mono', monospace;
-  height:100vh;
+html,body{
+  margin:0;padding:0;width:100%;height:100%;
+  background:black;color:#00ff00;
+  font-family:"JetBrains Mono", monospace;
   overflow:hidden;
-  animation:bgFlash .12s infinite;
 }
 
-/* BACKGROUND */
-@keyframes bgFlash{
+/* BACKGROUND FLASH */
+@keyframes flash{
   0%{background:#000}
-  25%{background:#020024}
-  50%{background:#001133}
-  75%{background:#220022}
+  25%{background:#020202}
+  50%{background:#00160f}
+  75%{background:#020202}
   100%{background:#000}
 }
+body{ animation:flash .12s infinite; }
 
-/* CENTER */
-.main{
-  height:100vh;
-  display:flex;
-  align-items:center;
-  justify-content:center;
+/* WRAPPER */
+.wrapper{
+  position:absolute; top:18px; left:50%;
+  transform:translateX(-50%);
+  width:100%; max-width:360px;
+  padding:12px; box-sizing:border-box;
+  text-align:center;
 }
 
-.box{
-  width:92%;
-  max-width:420px;
+/* ASCII */
+.ascii{
+  width:100%; max-width:340px;
+  margin:0 auto 6px auto;
+  font-size:8.5px; line-height:1.15;
+  white-space:pre; overflow:hidden;
   text-align:center;
+  color:#00ff00;
+  text-shadow:0 0 4px rgba(0,255,0,.5);
+}
+
+/* LABEL DI BAWAH ASCII (PRESISI) */
+.ascii-label{
+  display:block;
+  width:100%;
+  max-width:340px;
+  margin:0 auto 10px auto;
+  font-size:11px;
+  letter-spacing:1px;
+  text-align:center;
+  opacity:.95;
 }
 
 /* TITLE */
 .title{
-  font-size:26px;
-  letter-spacing:6px;
-  color:#0ff;
-  margin-bottom:18px;
-  text-shadow:
-    0 0 10px #0ff,
-    2px 0 red,
-    -2px 0 cyan;
-  transition:.5s;
+  font-size:14px; letter-spacing:1.5px;
+  margin-bottom:8px;
 }
 
-/* PANEL */
-.panel{
-  height:200px;
-  padding:18px;
-  border-radius:14px;
-  background:rgba(0,0,0,.65);
-  box-shadow:
-    0 0 25px rgba(0,255,255,.5),
-    inset 0 0 20px rgba(0,255,255,.35);
+/* TERMINAL */
+.terminal{
+  background:#020202;
+  border:1px solid #00ff00;
+  padding:10px;
+  height:220px;
   overflow:hidden;
-  display:flex;
-  align-items:center;
-  justify-content:center;
+  text-align:left;
+  font-size:12px;
+  box-shadow:0 0 12px rgba(0,255,0,.35);
 }
 
-/* TEXT */
-.text{
-  width:100%;
-  height:100%;
-  font-size:14px;
-  line-height:1.6;
-  color:#0f0;
-  text-shadow:0 0 8px #0f0;
-  word-break:break-word;
-  white-space:pre-wrap;
-  overflow:hidden;
+/* KEYBOARD / TERMUX INPUT */
+.keyboard{
+  margin-top:12px;
+  text-align:left;
+  font-size:12px;
 }
-
-/* WHATSAPP BUTTON */
-.wa{
-  margin-top:18px;
+.input-line{
+  display:flex; align-items:center; gap:6px;
+}
+.prompt{opacity:.9}
+.fake-input{
+  flex:1;
+  border-bottom:1px dashed #00ff00;
+  padding-bottom:2px;
+}
+.enter{
+  margin-top:6px;
   display:inline-block;
-  padding:14px 36px;
-  border-radius:14px;
-  background:#00ff7f;
-  color:#000;
-  font-weight:700;
-  text-decoration:none;
-  box-shadow:0 0 25px #00ff7f;
-  animation:waPulse 1.6s infinite;
+  padding:6px 10px;
+  border:1px solid #00ff00;
+  cursor:pointer;
+  user-select:none;
 }
-
-@keyframes waPulse{
-  0%,100%{transform:scale(1)}
-  50%{transform:scale(1.1)}
-}
-
-/* CYBER TEXT FLY */
-.fly{
-  position:absolute;
-  font-size:12px;
-  color:#0ff;
-  opacity:.6;
-  white-space:nowrap;
-  pointer-events:none;
-  animation:fly 4s linear forwards;
-}
-
-@keyframes fly{
-  from{transform:translateX(var(--from))}
-  to{transform:translateX(var(--to));opacity:0}
-}
-
-/* FOOTER */
-.footer{
-  margin-top:14px;
-  font-size:12px;
-  letter-spacing:2px;
-  color:#0ff;
-  text-shadow:0 0 10px #0ff;
+.enter:hover{
+  background:#00ff00; color:#000;
 }
 </style>
 </head>
 
 <body>
 
-<!-- AUDIO -->
-<audio id="glitch" autoplay loop>
+<!-- AUDIO AUTO ON -->
+<audio autoplay loop>
   <source src="https://files.catbox.moe/xi2sf8.mp3" type="audio/mpeg">
 </audio>
 
-<audio id="typing">
-  <source src="typing.mp3" type="audio/mpeg">
-</audio>
+<div class="wrapper">
 
-<div class="main">
-  <div class="box">
+<!-- ASCII MATA -->
+<pre class="ascii">
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣤⣶⣶⣶⣶⣤⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⢀⣴⣾⣿⣿⣿⣿⣿⣿⣿⣿⣷⣦⡀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⣠⣾⣿⣿⣿⠟⠋⠉⠙⠻⢿⣿⣿⣿⣿⣷⡄⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⣴⣿⣿⣿⡿⠁⠀⠀⣀⣀⠀⠀⠈⢻⣿⣿⣿⣦⠀⠀⠀⠀
+⠀⠀⠀⣼⣿⣿⣿⣿⡇⠀⢠⣾⣿⣿⣷⡄⠀⢸⣿⣿⣿⣿⣧⠀⠀⠀
+⠀⠀⠀⢿⣿⣿⣿⣿⣷⡀⠀⠻⢿⣿⠿⠟⠀⢀⣾⣿⣿⣿⣿⡿⠀⠀⠀
+⠀⠀⠀⠀⠻⢿⣿⣿⣿⣿⣶⣤⣀⣀⣀⣤⣶⣿⣿⣿⣿⡿⠟⠁⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠉⠛⠿⠿⠿⠿⠿⠿⠿⠿⠟⠟⠛⠋⠁⠀⠀⠀⠀⠀
+</pre>
 
-    <div class="title" id="title">SHADOW</div>
+<!-- LABEL PRESISI -->
+<div class="ascii-label">[ SHADOW STEALER WATCHING ]</div>
 
-    <div class="panel">
-      <div class="text" id="text">INITIALIZING...</div>
-    </div>
+<div class="title">$ pkg update shadow-stealer</div>
 
-    <!-- BUTTON WA -->
-    <a class="wa" href="https://wa.me/6285161570297" target="_blank">
-      CONTACT WHATSAPP
-    </a>
+<div class="terminal" id="terminal"></div>
 
-    <div class="footer">SHADOW STEALER</div>
-
+<!-- CONTACT ALA KEYBOARD TERMUX -->
+<div class="keyboard">
+  <div class="input-line">
+    <span class="prompt">$</span>
+    <span class="fake-input">open wa.me/6285161570297</span>
   </div>
+  <div class="enter" onclick="goWA()">↵ ENTER</div>
+</div>
+
 </div>
 
 <script>
-/* TITLE SWITCH */
-const title=document.getElementById("title");
-const words=["SHADOW","UPDATE"];
-let ti=0;
-
-setInterval(()=>{
-  title.style.opacity=0;
-  setTimeout(()=>{
-    ti=(ti+1)%words.length;
-    title.innerText=words[ti];
-    title.style.opacity=1;
-  },500);
-},3000);
-
-/* LOAD TEXT FILE */
-let lines=[];
-fetch("texts.txt")
+/* typing text */
+fetch("text.txt")
 .then(r=>r.text())
-.then(t=>{
-  lines=t.split("\n").filter(l=>l.trim()!=="");
-  showLine();
+.then(text=>{
+  const term=document.getElementById("terminal");
+  let i=0;
+  const typing=setInterval(()=>{
+    term.textContent+=text.charAt(i);
+    term.scrollTop=term.scrollHeight;
+    i++;
+    if(i>=text.length) clearInterval(typing);
+  },30);
 });
 
-const box=document.getElementById("text");
-const typing=document.getElementById("typing");
-let idx=0;
-
-function showLine(){
-  if(!lines.length) return;
-  box.innerText="";
-  let line=lines[idx%lines.length];
-  let i=0;
-
-  typing.currentTime=0;
-  typing.play();
-
-  const interval=setInterval(()=>{
-    if(i<line.length){
-      box.innerText+=line[i];
-      i++;
-    }else{
-      clearInterval(interval);
-      typing.pause();
-      idx++;
-      setTimeout(showLine,1200);
-    }
-  },40);
+/* enter to whatsapp */
+function goWA(){
+  window.open("https://wa.me/6285161570297","_blank");
 }
-
-/* FLYING CYBER TEXT */
-const flyText=[
-  "ACCESS GRANTED",
-  "TRACE OFF",
-  "ROOT LOGIN",
-  "SYSTEM ONLINE",
-  "DATA FLOW"
-];
-
-setInterval(()=>{
-  const f=document.createElement("div");
-  f.className="fly";
-  f.innerText=flyText[Math.floor(Math.random()*flyText.length)];
-  f.style.top=Math.random()*100+"%";
-  f.style.setProperty("--from",Math.random()>0.5?"-120%":"120%");
-  f.style.setProperty("--to",Math.random()>0.5?"120%":"-120%");
-  document.body.appendChild(f);
-  setTimeout(()=>f.remove(),4000);
-},300);
 </script>
 
 </body>
