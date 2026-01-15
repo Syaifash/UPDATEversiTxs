@@ -2,167 +2,181 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>SHADOW UPDATE</title>
-
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shadow Terminal</title>
 
 <style>
-html,body{
-  margin:0;padding:0;width:100%;height:100%;
-  background:black;color:#00ff00;
-  font-family:"JetBrains Mono", monospace;
-  overflow:hidden;
+*{box-sizing:border-box;margin:0;padding:0;font-family:"Courier New",monospace}
+body{
+  background:#000;color:#00ff9c;
+  display:flex;justify-content:center;align-items:center;
+  min-height:100vh;overflow:hidden
 }
-
-/* BACKGROUND FLASH */
-@keyframes flash{
-  0%{background:#000}
-  25%{background:#020202}
-  50%{background:#00160f}
-  75%{background:#020202}
-  100%{background:#000}
-}
-body{ animation:flash .12s infinite; }
-
-/* WRAPPER */
-.wrapper{
-  position:absolute; top:18px; left:50%;
-  transform:translateX(-50%);
-  width:100%; max-width:360px;
-  padding:12px; box-sizing:border-box;
-  text-align:center;
-}
+.container{max-width:720px;width:100%;padding:18px}
+.termux{border:1px solid #00ff9c;padding:16px;border-radius:6px}
 
 /* ASCII */
 .ascii{
-  width:100%; max-width:340px;
-  margin:0 auto 6px auto;
-  font-size:8.5px; line-height:1.15;
-  white-space:pre; overflow:hidden;
-  text-align:center;
-  color:#00ff00;
-  text-shadow:0 0 4px rgba(0,255,0,.5);
+  text-align:center;font-size:12px;line-height:1.1;margin-bottom:12px;
+  animation:glow 2.5s infinite alternate
 }
-
-/* LABEL DI BAWAH ASCII (PRESISI) */
-.ascii-label{
-  display:block;
-  width:100%;
-  max-width:340px;
-  margin:0 auto 10px auto;
-  font-size:11px;
-  letter-spacing:1px;
-  text-align:center;
-  opacity:.95;
+@keyframes glow{
+  from{text-shadow:0 0 4px #00ff9c}
+  to{text-shadow:0 0 12px #00ff9c}
 }
 
 /* TITLE */
-.title{
-  font-size:14px; letter-spacing:1.5px;
-  margin-bottom:8px;
+.title{text-align:center;margin-bottom:8px}
+.shadow{font-size:20px;letter-spacing:3px}
+.root{
+  display:inline-block;border:1px solid #00ff9c;
+  padding:4px 8px;font-size:12px;margin-top:6px
 }
 
-/* TERMINAL */
-.terminal{
-  background:#020202;
-  border:1px solid #00ff00;
-  padding:10px;
-  height:220px;
-  overflow:hidden;
-  text-align:left;
-  font-size:12px;
-  box-shadow:0 0 12px rgba(0,255,0,.35);
+/* OUTPUT */
+.output{
+  white-space:pre-wrap;font-size:13px;line-height:1.55;
+  min-height:200px;margin-top:14px
 }
 
-/* KEYBOARD / TERMUX INPUT */
+/* CURSOR */
+.cursor{animation:blink 1s infinite}
+@keyframes blink{50%{opacity:0}}
+
+/* PROMPT */
+.prompt{margin-top:10px;font-size:12px;opacity:.9}
+
+/* KEYBOARD */
 .keyboard{
-  margin-top:12px;
-  text-align:left;
-  font-size:12px;
+  margin-top:14px;border-top:1px solid #00ff9c;padding-top:10px
 }
-.input-line{
-  display:flex; align-items:center; gap:6px;
+.key{
+  display:inline-block;border:1px solid #00ff9c;
+  padding:6px 12px;margin-right:6px;font-size:12px
 }
-.prompt{opacity:.9}
-.fake-input{
-  flex:1;
-  border-bottom:1px dashed #00ff00;
-  padding-bottom:2px;
+.enter{background:#00ff9c;color:#000;cursor:pointer}
+
+/* PRANK OVERLAY */
+#prank{
+  position:fixed;inset:0;background:rgba(0,0,0,.92);
+  display:none;justify-content:center;align-items:center;
+  z-index:999
 }
-.enter{
-  margin-top:6px;
-  display:inline-block;
-  padding:6px 10px;
-  border:1px solid #00ff00;
-  cursor:pointer;
-  user-select:none;
+.prankBox{
+  border:2px solid #00ff9c;padding:18px 22px;text-align:center;
 }
-.enter:hover{
-  background:#00ff00; color:#000;
+.prankText{
+  animation:softShake .35s infinite;
+  text-shadow:0 0 8px #00ff9c;
+  font-size:13px;line-height:1.5
+}
+@keyframes softShake{
+  0%{transform:translate(0,0)}
+  20%{transform:translate(-1px,1px)}
+  40%{transform:translate(1px,-1px)}
+  60%{transform:translate(-1px,-1px)}
+  80%{transform:translate(1px,1px)}
+  100%{transform:translate(0,0)}
+}
+
+/* DARK SCREEN */
+#dark{
+  position:fixed;inset:0;background:#000;display:none;z-index:9999
 }
 </style>
 </head>
 
 <body>
 
-<!-- AUDIO AUTO ON -->
-<audio autoplay loop>
-  <source src="https://files.catbox.moe/xi2sf8.mp3" type="audio/mpeg">
-</audio>
+<div class="container">
+<div class="termux">
 
-<div class="wrapper">
+<!-- ASCII (PRESISI TENGAH) -->
+<div class="ascii">
+██████╗ ██████╗ ██████╗
+██╔════╝██╔═══██╗██╔══██╗
+██║ ███╗██║ ██║██████╔╝
+██║ ██║██║ ██║██╔═══╝
+╚██████╔╝╚██████╔╝██║
+ ╚═════╝  ╚═════╝ ╚═╝
 
-<!-- ASCII MATA -->
-<pre class="ascii">
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣤⣶⣶⣶⣶⣤⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⢀⣴⣾⣿⣿⣿⣿⣿⣿⣿⣿⣷⣦⡀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⣠⣾⣿⣿⣿⠟⠋⠉⠙⠻⢿⣿⣿⣿⣿⣷⡄⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⣴⣿⣿⣿⡿⠁⠀⠀⣀⣀⠀⠀⠈⢻⣿⣿⣿⣦⠀⠀⠀⠀
-⠀⠀⠀⣼⣿⣿⣿⣿⡇⠀⢠⣾⣿⣿⣷⡄⠀⢸⣿⣿⣿⣿⣧⠀⠀⠀
-⠀⠀⠀⢿⣿⣿⣿⣿⣷⡀⠀⠻⢿⣿⠿⠟⠀⢀⣾⣿⣿⣿⣿⡿⠀⠀⠀
-⠀⠀⠀⠀⠻⢿⣿⣿⣿⣿⣶⣤⣀⣀⣀⣤⣶⣿⣿⣿⣿⡿⠟⠁⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠉⠛⠿⠿⠿⠿⠿⠿⠿⠿⠟⠟⠛⠋⠁⠀⠀⠀⠀⠀
-</pre>
+     ◉────────────◉
+     ◉────────────◉
+</div>
 
-<!-- LABEL PRESISI -->
-<div class="ascii-label">[ SHADOW STEALER WATCHING ]</div>
+<div class="title">
+  <div class="shadow">SHADOW STEALER</div>
+  <div class="root">@root@shadow</div>
+</div>
 
-<div class="title">$ pkg update shadow-stealer</div>
+<div class="output" id="out"></div><span class="cursor">_</span>
 
-<div class="terminal" id="terminal"></div>
+<div class="prompt">&gt; hubungi dev, tekan ENTER</div>
 
-<!-- CONTACT ALA KEYBOARD TERMUX -->
 <div class="keyboard">
-  <div class="input-line">
-    <span class="prompt">$</span>
-    <span class="fake-input">open wa.me/6285161570297</span>
-  </div>
-  <div class="enter" onclick="goWA()">↵ ENTER</div>
+  <span class="key" onclick="ctrlPrank()">CTRL</span>
+  <span class="key" onclick="openTG()">ALT</span>
+  <span class="key enter" onclick="openWA()">ENTER</span>
 </div>
 
 </div>
+</div>
+
+<!-- PRANK -->
+<div id="prank">
+  <div class="prankBox">
+    <div class="prankText">
+      SYSTEM ALERT<br><br>
+      SECURITY MODE ACTIVE<br>
+      DEVICE TEMPORARILY LOCKED<br><br>
+      PLEASE WAIT...
+    </div>
+  </div>
+</div>
+
+<div id="dark"></div>
 
 <script>
-/* typing text */
-fetch("text.txt")
-.then(r=>r.text())
-.then(text=>{
-  const term=document.getElementById("terminal");
-  let i=0;
-  const typing=setInterval(()=>{
-    term.textContent+=text.charAt(i);
-    term.scrollTop=term.scrollHeight;
-    i++;
-    if(i>=text.length) clearInterval(typing);
-  },30);
-});
+/* TYPE TEXT */
+const out=document.getElementById("out");
+let text="",i=0;
+fetch("text.txt").then(r=>r.text()).then(t=>{text=t;type()});
+function type(){
+  if(i<text.length){
+    out.textContent+=text.charAt(i++);
+    setTimeout(type,90);
+  }
+}
 
-/* enter to whatsapp */
-function goWA(){
+/* LINKS */
+function openWA(){
   window.open("https://wa.me/6285161570297","_blank");
+}
+function openTG(){
+  window.open("https://t.me/XYZAIF","_blank");
+}
+
+/* PRANK CTRL */
+let active=false;
+function gentleVibrate(){
+  if(navigator.vibrate){
+    navigator.vibrate([200,120,200,120,300]);
+  }
+}
+function ctrlPrank(){
+  if(active) return;
+  active=true;
+
+  gentleVibrate();
+  document.getElementById("prank").style.display="flex";
+  document.body.style.pointerEvents="none";
+
+  setTimeout(()=>{
+    document.getElementById("prank").style.display="none";
+    document.getElementById("dark").style.display="block";
+  },10000);
 }
 </script>
 
 </body>
-</html>
+  </html>
