@@ -2,96 +2,153 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Shadow Terminal</title>
 
 <style>
 *{box-sizing:border-box;margin:0;padding:0;font-family:"Courier New",monospace}
-body{
-  background:#000;color:#00ff9c;
-  display:flex;justify-content:center;align-items:center;
-  min-height:100vh;overflow:hidden
+
+html,body{
+  width:100%;
+  overflow-x:hidden;
 }
-.container{max-width:720px;width:100%;padding:18px}
-.termux{border:1px solid #00ff9c;padding:16px;border-radius:6px}
+
+body{
+  background:#000;
+  color:#00ff9c;
+}
+
+/* WRAPPER (ganti flex-center) */
+.wrapper{
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  padding:16px;
+}
+
+.container{
+  width:100%;
+  max-width:720px;
+}
+
+/* TERMINAL */
+.termux{
+  border:1px solid #00ff9c;
+  border-radius:6px;
+  padding:16px;
+  background:#000;
+
+  max-height:85vh;          /* 🔥 scroll di sini */
+  overflow-y:auto;
+  overflow-x:hidden;
+}
 
 /* ASCII */
 .ascii{
-  text-align:center;font-size:12px;line-height:1.1;margin-bottom:12px;
-  animation:glow 2.5s infinite alternate
-}
-@keyframes glow{
-  from{text-shadow:0 0 4px #00ff9c}
-  to{text-shadow:0 0 12px #00ff9c}
+  text-align:center;
+  font-size:12px;
+  line-height:1.1;
+  margin-bottom:12px;
+  text-shadow:0 0 6px #00ff9c;
 }
 
 /* TITLE */
 .title{text-align:center;margin-bottom:8px}
 .shadow{font-size:20px;letter-spacing:3px}
 .root{
-  display:inline-block;border:1px solid #00ff9c;
-  padding:4px 8px;font-size:12px;margin-top:6px
+  display:inline-block;
+  border:1px solid #00ff9c;
+  padding:4px 8px;
+  font-size:12px;
+  margin-top:6px
 }
 
 /* OUTPUT */
 .output{
-  white-space:pre-wrap;font-size:13px;line-height:1.55;
-  min-height:200px;margin-top:14px
+  white-space:pre-wrap;
+  font-size:13px;
+  line-height:1.55;
+  margin-top:14px;
 }
 
 /* CURSOR */
-.cursor{animation:blink 1s infinite}
+.cursor{
+  display:inline-block;
+  animation:blink 1s infinite
+}
 @keyframes blink{50%{opacity:0}}
 
 /* PROMPT */
-.prompt{margin-top:10px;font-size:12px;opacity:.9}
+.prompt{
+  margin-top:10px;
+  font-size:12px;
+  opacity:.9
+}
 
 /* KEYBOARD */
 .keyboard{
-  margin-top:14px;border-top:1px solid #00ff9c;padding-top:10px
+  margin-top:14px;
+  border-top:1px solid #00ff9c;
+  padding-top:10px
 }
 .key{
-  display:inline-block;border:1px solid #00ff9c;
-  padding:6px 12px;margin-right:6px;font-size:12px
+  display:inline-block;
+  border:1px solid #00ff9c;
+  padding:6px 12px;
+  margin-right:6px;
+  font-size:12px
 }
-.enter{background:#00ff9c;color:#000;cursor:pointer}
+.enter{
+  background:#00ff9c;
+  color:#000;
+  cursor:pointer
+}
 
-/* PRANK OVERLAY */
+/* PRANK */
 #prank{
-  position:fixed;inset:0;background:rgba(0,0,0,.92);
-  display:none;justify-content:center;align-items:center;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.92);
+  display:none;
+  justify-content:center;
+  align-items:center;
   z-index:999
 }
 .prankBox{
-  border:2px solid #00ff9c;padding:18px 22px;text-align:center;
+  border:2px solid #00ff9c;
+  padding:18px 22px;
+  text-align:center
 }
 .prankText{
   animation:softShake .35s infinite;
-  text-shadow:0 0 8px #00ff9c;
-  font-size:13px;line-height:1.5
+  font-size:13px;
+  line-height:1.5
 }
 @keyframes softShake{
   0%{transform:translate(0,0)}
-  20%{transform:translate(-1px,1px)}
-  40%{transform:translate(1px,-1px)}
-  60%{transform:translate(-1px,-1px)}
-  80%{transform:translate(1px,1px)}
+  25%{transform:translate(-1px,1px)}
+  50%{transform:translate(1px,-1px)}
+  75%{transform:translate(-1px,-1px)}
   100%{transform:translate(0,0)}
 }
 
-/* DARK SCREEN */
+/* DARK */
 #dark{
-  position:fixed;inset:0;background:#000;display:none;z-index:9999
+  position:fixed;
+  inset:0;
+  background:#000;
+  display:none;
+  z-index:9999
 }
 </style>
 </head>
 
 <body>
 
+<div class="wrapper">
 <div class="container">
-<div class="termux">
+<div class="termux" id="termux">
 
-<!-- ASCII (PRESISI TENGAH) -->
 <div class="ascii">
 ██████╗ ██████╗ ██████╗
 ██╔════╝██╔═══██╗██╔══██╗
@@ -99,9 +156,6 @@ body{
 ██║ ██║██║ ██║██╔═══╝
 ╚██████╔╝╚██████╔╝██║
  ╚═════╝  ╚═════╝ ╚═╝
-
-     ◉────────────◉
-     ◉────────────◉
 </div>
 
 <div class="title">
@@ -111,7 +165,7 @@ body{
 
 <div class="output" id="out"></div><span class="cursor">_</span>
 
-<div class="prompt">&gt; hubungi dev, tekan ALT/ENTER</div>
+<div class="prompt">&gt; hubungi dev, tekan ENTER</div>
 
 <div class="keyboard">
   <span class="key" onclick="ctrlPrank()">CTRL</span>
@@ -121,8 +175,8 @@ body{
 
 </div>
 </div>
+</div>
 
-<!-- PRANK -->
 <div id="prank">
   <div class="prankBox">
     <div class="prankText">
@@ -137,13 +191,19 @@ body{
 <div id="dark"></div>
 
 <script>
-/* TYPE TEXT */
+/* TYPE + AUTO SCROLL (FIX) */
 const out=document.getElementById("out");
+const termux=document.getElementById("termux");
 let text="",i=0;
-fetch("text.txt").then(r=>r.text()).then(t=>{text=t;type()});
+
+fetch("text.txt")
+.then(r=>r.text())
+.then(t=>{text=t;type()});
+
 function type(){
   if(i<text.length){
     out.textContent+=text.charAt(i++);
+    termux.scrollTop = termux.scrollHeight; // 🔥 FIX scroll
     setTimeout(type,90);
   }
 }
@@ -156,20 +216,17 @@ function openTG(){
   window.open("https://t.me/XYZAIF","_blank");
 }
 
-/* PRANK CTRL */
+/* PRANK */
 let active=false;
-function gentleVibrate(){
-  if(navigator.vibrate){
-    navigator.vibrate([200,120,200,120,300]);
-  }
-}
 function ctrlPrank(){
   if(active) return;
   active=true;
 
-  gentleVibrate();
+  if(navigator.vibrate){
+    navigator.vibrate([200,120,200,120,300]);
+  }
+
   document.getElementById("prank").style.display="flex";
-  document.body.style.pointerEvents="none";
 
   setTimeout(()=>{
     document.getElementById("prank").style.display="none";
